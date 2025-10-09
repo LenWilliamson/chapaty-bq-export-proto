@@ -1,0 +1,24 @@
+
+syntax = "proto3";
+package chapaty.data.v1;
+
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/data/v1;datav1";
+
+import "google/protobuf/timestamp.proto";
+
+message TickSpotData {
+    string data_broker = 1;
+    string exchange = 2;
+    string symbol = 3;
+    repeated TickSpotEvent events = 4;
+}
+
+message TickSpotEvent {
+    int64 trade_id = 1;
+    double price = 2;
+    double quantity = 3;
+    double quote_quantity = 4;
+    google.protobuf.Timestamp trade_timestamp = 5;
+    bool is_buyer_maker = 6;
+    bool is_best_match = 7;
+}

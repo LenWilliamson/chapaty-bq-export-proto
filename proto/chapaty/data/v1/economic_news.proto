@@ -1,0 +1,51 @@
+
+syntax = "proto3";
+package chapaty.data.v1;
+
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/data/v1;datav1";
+
+import "google/protobuf/timestamp.proto";
+
+message EconomicNewsData {
+    string data_broker = 1;
+    string data_source = 2;
+    string category = 3;
+    repeated EconomicNewsEvent events = 4;
+}
+
+message EconomicNewsEvent {
+    // The UTC timestamp of the event, converted from the local time zone (adjusted for daylight saving time if applicable).
+    google.protobuf.Timestamp event_timestamp = 1;
+
+    // The IANA time zone name (e.g., "America/New_York") corresponding to the local time of the event.
+    string iana_time_zone = 2;
+
+    // Short identifier for the type of news (e.g., "NFP").
+    string news_type = 3;
+
+    // Full descriptive name of the news event (e.g., "Non-Farm Payrolls Report").
+    string news_name = 4;
+
+    // The country where the news is published (e.g., "United States").
+    string country = 5;
+
+    // ISO 3166-1 alpha-2 country code for each country (e.g., "US").
+    string country_code = 6;
+
+    // The city where the news is officially published.
+    string city = 7;
+
+    // The day of the week when the event occurs in the local time zone during winter time (e.g., "Tuesday").
+    string weekday_local = 8;
+
+    // The day of the week when the event occurs in the UTC time zone (e.g., "Tuesday").
+    string weekday_utc = 9;
+
+    // Importance level of the event (e.g., "High", "Medium", "Low").
+    string importance = 10;
+
+    // News outcome.
+    double actual = 11;
+    double forecast = 12;
+    double previous = 13;
+}

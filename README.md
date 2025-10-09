@@ -1,2 +1,2 @@
 # chapaty-bq-export-proto
-RPCs for BigQuery exports
+BigQuery Exporter API — A gRPC service for streaming structured market data from the Chapaty data platform.

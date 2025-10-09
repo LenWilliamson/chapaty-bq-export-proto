@@ -1,0 +1,28 @@
+syntax = "proto3";
+package chapaty.data.v1;
+
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/data/v1;datav1";
+
+import "google/protobuf/timestamp.proto";
+
+message OhlcvSpotData {
+    string data_broker = 1;
+    string exchange = 2;
+    string symbol = 3;
+    string period = 4;
+    repeated OhlcvSpotEvent events = 5;
+}
+
+message OhlcvSpotEvent {
+    google.protobuf.Timestamp open_timestamp = 1;
+    double open = 2;
+    double high = 3;
+    double low = 4;
+    double close = 5;
+    double volume = 6;
+    google.protobuf.Timestamp close_timestamp = 7;
+    double quote_asset_volume = 8;
+    int64 number_of_trades = 9;
+    double taker_buy_base_asset_volume = 10;
+    double taker_buy_quote_asset_volume = 11;
+}

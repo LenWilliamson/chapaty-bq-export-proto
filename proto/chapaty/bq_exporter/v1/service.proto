@@ -1,0 +1,65 @@
+syntax = "proto3";
+package chapaty.bq_exporter.v1;
+
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/bq_exporter/v1;bqexporterv1";
+
+import "proto/chapaty/data/v1/common.proto";
+import "proto/chapaty/data/v1/tick_spot.proto";
+import "proto/chapaty/data/v1/ohlcv_spot.proto";
+import "proto/chapaty/data/v1/ohlcv_future.proto";
+import "proto/chapaty/data/v1/tpo_spot.proto";
+import "proto/chapaty/data/v1/tpo_future.proto";
+import "proto/chapaty/data/v1/volume_profile_spot.proto";
+import "proto/chapaty/data/v1/economic_news.proto";
+
+service ExporterService {
+    // Streams market data based on a flexible query.
+    rpc StreamData(StreamDataRequest) returns (stream StreamMarketDataResponse);
+}
+
+message StreamDataRequest {
+    // Required: Specify the source of the data.
+    chapaty.data.v1.DataBroker data_broker = 1;
+    
+    // Required: Specify the kind of schema to retrieve.
+    chapaty.data.v1.SchemaKind schema_kind = 2;
+    
+    // Required: The year for which data is requested (e.g., 2025).
+    int32 year = 5;
+
+    // Required: Choose exactly one instrument identifier.
+    oneof instrument_identifier {
+        // For spot markets, crypto, etc. (e.g., "BTC-USDT")
+        string spot_symbol = 3;
+
+        // For futures, provide the full contract code (e.g., "6EZ5")
+        string futures_contract = 4;
+    }
+}
+
+message StreamMarketDataResponse {
+    // The server will stream responses containing batches of data.
+    // Each response will only have one of these fields populated.
+    oneof data_batch {
+        // Tick-level data for spot markets
+        chapaty.data.v1.TickSpotData tick_spot = 1;
+
+        // OHLCV (Open-High-Low-Close-Volume) data for spot markets
+        chapaty.data.v1.OhlcvSpotData ohlcv_spot = 2;
+
+        // OHLCV data for futures markets
+        chapaty.data.v1.OhlcvFutureData ohlcv_future = 3;
+
+        // TPO (Time Price Opportunity) data for spot markets
+        chapaty.data.v1.TpoSpotData tpo_spot = 4;
+
+        // TPO data for futures markets
+        chapaty.data.v1.TpoFutureData tpo_future = 5;
+
+        // Volume Profile data for spot markets
+        chapaty.data.v1.VolumeProfileSpotData volume_profile_spot = 6;
+
+        // Economic news data (e.g., macroeconomic releases)
+        chapaty.data.v1.EconomicNewsData economic_news = 7;
+    }
+}

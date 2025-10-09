@@ -1,0 +1,30 @@
+syntax = "proto3";
+package chapaty.data.v1;
+
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/data/v1;datav1";
+
+import "google/protobuf/timestamp.proto";
+
+message VolumeProfileSpotData {
+    string data_broker = 1;
+    string exchange = 2;
+    string symbol = 3;
+    string window_delta = 4;
+    repeated VolumeProfileSpotEvent events = 5;
+}
+
+message VolumeProfileSpotEvent {
+    google.protobuf.Timestamp window_start = 1;
+    google.protobuf.Timestamp window_end = 2;
+    double price_bin_start = 3;
+    double price_bin_end = 4;
+    double base_volume = 5;
+    double taker_buy_base_volume = 6;
+    double taker_sell_base_volume = 7;
+    double quote_volume = 8;
+    double taker_buy_quote_volume = 9;
+    double taker_sell_quote_volume = 10;
+    int64 number_of_trades = 11;
+    int64 number_of_buy_trades = 12;
+    int64 number_of_sell_trades = 13;
+}

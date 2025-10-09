@@ -1,0 +1,21 @@
+syntax = "proto3";
+package chapaty.data.v1;
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/data/v1;datav1";
+
+enum DataBroker {
+    DATA_SOURCE_UNSPECIFIED = 0;
+    BINANCE = 1;
+    NINJA_TRADER = 2;
+    INVESTING_COM = 3;
+}
+
+enum SchemaKind {
+    SCHEMA_KIND_UNSPECIFIED = 0;
+    TICK_SPOT = 1;
+    OHLCV_FUTURE = 2;
+    OHLCV_SPOT = 3;
+    TPO_SPOT = 4;
+    TPO_FUTURE = 5;
+    VOLUME_PROFILE_SPOT = 6;
+    ECONOMIC_NEWS = 7;
+}

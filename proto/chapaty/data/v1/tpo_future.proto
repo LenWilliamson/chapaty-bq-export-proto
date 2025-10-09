@@ -1,0 +1,23 @@
+syntax = "proto3";
+package chapaty.data.v1;
+
+option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/data/v1;datav1";
+
+import "google/protobuf/timestamp.proto";
+
+message TpoFutureData {
+    string data_broker = 1;
+    string exchange = 2;
+    string root_symbol = 3;
+    string contract_code = 4;
+    string window_delta = 5;
+    repeated TpoFutureEvent events = 6;
+}
+
+message TpoFutureEvent {
+    google.protobuf.Timestamp window_start = 1;
+    google.protobuf.Timestamp window_end = 2;
+    double price_bin_start = 3;
+    double price_bin_end = 4;
+    int64 time_slot_count = 5;
+}
