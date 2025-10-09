@@ -25,15 +25,15 @@ message StreamDataRequest {
     chapaty.data.v1.SchemaKind schema_kind = 2;
     
     // Required: The year for which data is requested (e.g., 2025).
-    int32 year = 5;
+    int32 year = 3;
 
     // Required: Choose exactly one instrument identifier.
     oneof instrument_identifier {
         // For spot markets, crypto, etc. (e.g., "BTC-USDT")
-        string spot_symbol = 3;
+        string spot_symbol = 4;
 
         // For futures, provide the full contract code (e.g., "6EZ5")
-        string futures_contract = 4;
+        string futures_contract = 5;
     }
 }
 
