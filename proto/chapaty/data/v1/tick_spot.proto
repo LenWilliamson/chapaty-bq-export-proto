@@ -6,10 +6,7 @@ option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/dat
 
 import "google/protobuf/timestamp.proto";
 
-message TickSpotData {
-    string data_broker = 1;
-    string exchange = 2;
-    string symbol = 3;
+message TickSpotBatch {
     repeated TickSpotEvent events = 4;
 }
 

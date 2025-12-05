@@ -6,11 +6,8 @@ option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/dat
 
 import "google/protobuf/timestamp.proto";
 
-message EconomicNewsData {
-    string data_broker = 1;
-    string data_source = 2;
-    string category = 3;
-    repeated EconomicNewsEvent events = 4;
+message EconomicNewsBatch {
+    repeated EconomicNewsEvent events = 1;
 }
 
 message EconomicNewsEvent {

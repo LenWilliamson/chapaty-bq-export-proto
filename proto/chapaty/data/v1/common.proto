@@ -17,5 +17,5 @@ enum SchemaKind {
     TPO_SPOT = 4;
     TPO_FUTURE = 5;
     VOLUME_PROFILE_SPOT = 6;
-    ECONOMIC_NEWS = 7;
+    ECONOMIC_CALENDAR = 7;
 }

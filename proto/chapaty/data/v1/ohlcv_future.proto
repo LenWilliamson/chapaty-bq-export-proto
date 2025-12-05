@@ -5,13 +5,8 @@ option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/dat
 
 import "google/protobuf/timestamp.proto";
 
-message OhlcvFutureData {
-    string data_broker = 1;
-    string exchange = 2;
-    string root_symbol = 3;
-    string contract_code = 4;
-    string period = 5;
-    repeated OhlcvFutureEvent events = 6;
+message OhlcvFutureBatch {
+    repeated OhlcvFutureEvent events = 1;
 }
 
 message OhlcvFutureEvent {

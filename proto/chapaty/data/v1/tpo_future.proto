@@ -5,13 +5,8 @@ option go_package = "github.com/LenWilliamson/chapaty-storage/gen/go/chapaty/dat
 
 import "google/protobuf/timestamp.proto";
 
-message TpoFutureData {
-    string data_broker = 1;
-    string exchange = 2;
-    string root_symbol = 3;
-    string contract_code = 4;
-    string window_delta = 5;
-    repeated TpoFutureEvent events = 6;
+message TpoFutureBatch {
+    repeated TpoFutureEvent events = 1;
 }
 
 message TpoFutureEvent {

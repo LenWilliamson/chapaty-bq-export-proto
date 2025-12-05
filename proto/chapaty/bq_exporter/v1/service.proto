@@ -14,7 +14,8 @@ import "proto/chapaty/data/v1/economic_news.proto";
 
 service ExporterService {
     // Streams market data based on a flexible query.
-    rpc StreamData(StreamDataRequest) returns (stream StreamMarketDataResponse);
+    // First response contains metadata, subsequent responses contain data batches.
+    rpc StreamData(StreamDataRequest) returns (stream StreamDataResponse);
 }
 
 message StreamDataRequest {
@@ -22,44 +23,100 @@ message StreamDataRequest {
     chapaty.data.v1.DataBroker data_broker = 1;
     
     // Required: Specify the kind of schema to retrieve.
+    // This determines which other fields are required.
     chapaty.data.v1.SchemaKind schema_kind = 2;
     
+    // Required: Symbol/contract identifier (e.g., "btc-usdt", "6ez5")
+    // The schema_kind already indicates if this is spot or futures data.
+    string symbol = 3;
+    
     // Required: The year for which data is requested (e.g., 2025).
-    int32 year = 3;
+    int32 year = 4;
+    
+    // Optional: Exchange name (e.g., "binance", "cme")
+    // If empty, defaults to the name of the given data_broker.
+    string exchange = 5;
+    
+    // Optional: Base timeframe period for OHLCV/TPO data (e.g., "1m", "5m", "1h", "1d")
+    // Required for: OHLCV_SPOT, OHLCV_FUTURE, TPO_SPOT, TPO_FUTURE
+    // Default: "1m"
+    // Not used for: TICK_SPOT, VOLUME_PROFILE_SPOT
+    string period = 6;
+    
+    // Optional: Aggregation timeframe for volume profile and TPO queries.
+    // Format: N{m|h|d|w} (e.g., "5m", "1h", "1d", "1w")
+    // Aggregates base 1-minute data to the specified resolution.
+    // Defaults to "1m" (no aggregation) if not specified.
+    // Only used for: VOLUME_PROFILE_SPOT, TPO_SPOT, TPO_FUTURE
+    string agg_time_frame = 7;
+    
+    // Optional: Price bin size for volume profile and TPO aggregation (in quote currency).
+    // Examples: 1.0 (1 USD bins), 5.0 (5 USD bins), 0.01 (1 cent bins), 0.00005 (6e tick size)
+    // Rebuckets base granular price bins to the specified size.
+    // Defaults to the finest available price granularity if not specified.
+    // Only used for: VOLUME_PROFILE_SPOT, TPO_SPOT, TPO_FUTURE
+    double agg_price_bin = 8;
+    
+    // Optional: Maximum events per batch in streaming responses.
+    // Allows clients to tune latency vs throughput.
+    // Defaults to 1000 if not specified or set to 0.
+    // Recommended range: 100-10000 depending on event size and network conditions.
+    int32 batch_size = 100;
+}
 
-    // Required: Choose exactly one instrument identifier.
-    oneof instrument_identifier {
-        // For spot markets, crypto, etc. (e.g., "BTC-USDT")
-        string spot_symbol = 4;
-
-        // For futures, provide the full contract code (e.g., "6EZ5")
-        string futures_contract = 5;
+message StreamDataResponse {
+    // First message contains metadata about the stream,
+    // subsequent messages contain data batches.
+    oneof message {
+        StreamMetadata metadata = 1;
+        DataBatch batch = 2;
     }
 }
 
-message StreamMarketDataResponse {
-    // The server will stream responses containing batches of data.
-    // Each response will only have one of these fields populated.
-    oneof data_batch {
+message StreamMetadata {
+    // Echo back the query parameters for verification
+    chapaty.data.v1.DataBroker data_broker = 1;
+    chapaty.data.v1.SchemaKind schema_kind = 2;
+    string exchange = 3;
+    string symbol = 4;
+    string period = 5;
+    
+    // Server-generated stream identifier for debugging/logging
+    string stream_id = 6;
+    
+    // Estimated total number of events (0 if unknown)
+    int64 estimated_count = 7;
+}
+
+message DataBatch {
+    // Each batch contains only events - no repeated metadata.
+    // The client combines this with the metadata from the first message.
+    oneof data {
         // Tick-level data for spot markets
-        chapaty.data.v1.TickSpotData tick_spot = 1;
+        chapaty.data.v1.TickSpotBatch tick_spot = 1;
 
         // OHLCV (Open-High-Low-Close-Volume) data for spot markets
-        chapaty.data.v1.OhlcvSpotData ohlcv_spot = 2;
+        chapaty.data.v1.OhlcvSpotBatch ohlcv_spot = 2;
 
         // OHLCV data for futures markets
-        chapaty.data.v1.OhlcvFutureData ohlcv_future = 3;
+        chapaty.data.v1.OhlcvFutureBatch ohlcv_future = 3;
 
         // TPO (Time Price Opportunity) data for spot markets
-        chapaty.data.v1.TpoSpotData tpo_spot = 4;
+        chapaty.data.v1.TpoSpotBatch tpo_spot = 4;
 
         // TPO data for futures markets
-        chapaty.data.v1.TpoFutureData tpo_future = 5;
+        chapaty.data.v1.TpoFutureBatch tpo_future = 5;
 
         // Volume Profile data for spot markets
-        chapaty.data.v1.VolumeProfileSpotData volume_profile_spot = 6;
+        chapaty.data.v1.VolumeProfileSpotBatch volume_profile_spot = 6;
 
         // Economic news data (e.g., macroeconomic releases)
-        chapaty.data.v1.EconomicNewsData economic_news = 7;
+        chapaty.data.v1.EconomicNewsBatch economic_news = 7;
     }
+    
+    // Sequence number for this batch (starts at 0)
+    int64 sequence = 10;
+    
+    // True if this is the final batch in the stream
+    bool is_final = 11;
 }
