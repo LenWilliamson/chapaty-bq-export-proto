@@ -10,11 +10,10 @@ import "proto/chapaty/data/v1/ohlcv_future.proto";
 import "proto/chapaty/data/v1/tpo_spot.proto";
 import "proto/chapaty/data/v1/tpo_future.proto";
 import "proto/chapaty/data/v1/volume_profile_spot.proto";
-import "proto/chapaty/data/v1/economic_news.proto";
+import "proto/chapaty/data/v1/economic_calendar.proto";
 
 service ExporterService {
     // Streams market data based on a flexible query.
-    // First response contains metadata, subsequent responses contain data batches.
     rpc StreamData(StreamDataRequest) returns (stream StreamDataResponse);
 }
 
@@ -65,27 +64,7 @@ message StreamDataRequest {
 }
 
 message StreamDataResponse {
-    // First message contains metadata about the stream,
-    // subsequent messages contain data batches.
-    oneof message {
-        StreamMetadata metadata = 1;
-        DataBatch batch = 2;
-    }
-}
-
-message StreamMetadata {
-    // Echo back the query parameters for verification
-    chapaty.data.v1.DataBroker data_broker = 1;
-    chapaty.data.v1.SchemaKind schema_kind = 2;
-    string exchange = 3;
-    string symbol = 4;
-    string period = 5;
-    
-    // Server-generated stream identifier for debugging/logging
-    string stream_id = 6;
-    
-    // Estimated total number of events (0 if unknown)
-    int64 estimated_count = 7;
+    DataBatch batch = 1;
 }
 
 message DataBatch {
@@ -110,8 +89,8 @@ message DataBatch {
         // Volume Profile data for spot markets
         chapaty.data.v1.VolumeProfileSpotBatch volume_profile_spot = 6;
 
-        // Economic news data (e.g., macroeconomic releases)
-        chapaty.data.v1.EconomicNewsBatch economic_news = 7;
+        // Economic calendar data (e.g., macroeconomic releases)
+        chapaty.data.v1.EconomicCalendarBatch economic_calendar = 7;
     }
     
     // Sequence number for this batch (starts at 0)
