@@ -94,8 +94,8 @@ message DataBatch {
     }
     
     // Sequence number for this batch (starts at 0)
-    int64 sequence = 10;
+    int64 sequence = 100;
     
     // True if this is the final batch in the stream
-    bool is_final = 11;
+    bool is_final = 110;
 }
