@@ -56,6 +56,12 @@ message StreamDataRequest {
     // Only used for: VOLUME_PROFILE_SPOT, TPO_SPOT, TPO_FUTURE
     double agg_price_bin = 8;
     
+    // Optional: Data source identifier for economic calendar events (e.g., "investing.com", "fred")
+    // Filters economic calendar data by the provider/source of the event.
+    // If empty, returns events from all available data sources.
+    // Only used for: ECONOMIC_CALENDAR
+    string data_source = 9;
+    
     // Optional: Maximum events per batch in streaming responses.
     // Allows clients to tune latency vs throughput.
     // Defaults to 1000 if not specified or set to 0.
