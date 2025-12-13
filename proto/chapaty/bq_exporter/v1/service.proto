@@ -61,6 +61,12 @@ message StreamDataRequest {
     // If empty, returns events from all available data sources.
     // Only used for: ECONOMIC_CALENDAR
     string data_source = 9;
+
+    // Optional: ISO 4217 currency code (e.g., "USD", "EUR", "GBP").
+    // Filters economic calendar data by the currency code of the event.
+    // If empty, returns events from all available currency codes.
+    // Only used for: ECONOMIC_CALENDAR
+    string curreny_code = 10;
     
     // Optional: Maximum events per batch in streaming responses.
     // Allows clients to tune latency vs throughput.
