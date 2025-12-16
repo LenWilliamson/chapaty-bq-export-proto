@@ -3,111 +3,200 @@ package chapaty.bq_exporter.v1;
 
 option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty/bq_exporter/v1;bqexporterv1";
 
-import "proto/chapaty/data/v1/common.proto";
-import "proto/chapaty/data/v1/tick_spot.proto";
-import "proto/chapaty/data/v1/ohlcv_spot.proto";
-import "proto/chapaty/data/v1/ohlcv_future.proto";
-import "proto/chapaty/data/v1/tpo_spot.proto";
-import "proto/chapaty/data/v1/tpo_future.proto";
-import "proto/chapaty/data/v1/volume_profile_spot.proto";
-import "proto/chapaty/data/v1/economic_calendar.proto";
+import "../../data/v1/common.proto";
+import "../../data/v1/tick_spot.proto";
+import "../../data/v1/ohlcv_spot.proto";
+import "../../data/v1/ohlcv_future.proto";
+import "../../data/v1/tpo_spot.proto";
+import "../../data/v1/tpo_future.proto";
+import "../../data/v1/volume_profile_spot.proto";
+import "../../data/v1/economic_calendar.proto";
 
+// Market data export service.
+// Each RPC is specialized for a specific data type, providing clear contracts
+// and enabling independent evolution of each endpoint.
 service ExporterService {
-    // Streams market data based on a flexible query.
-    rpc StreamData(StreamDataRequest) returns (stream StreamDataResponse);
+  // Stream tick-level spot market data
+  rpc StreamTickSpot(StreamTickSpotRequest) returns (stream StreamTickSpotResponse);
+
+  // Stream OHLCV data for spot markets
+  rpc StreamOhlcvSpot(StreamOhlcvSpotRequest) returns (stream StreamOhlcvSpotResponse);
+
+  // Stream OHLCV data for futures markets
+  rpc StreamOhlcvFuture(StreamOhlcvFutureRequest) returns (stream StreamOhlcvFutureResponse);
+
+  // Stream TPO data for spot markets
+  rpc StreamTpoSpot(StreamTpoSpotRequest) returns (stream StreamTpoSpotResponse);
+
+  // Stream TPO data for futures markets
+  rpc StreamTpoFuture(StreamTpoFutureRequest) returns (stream StreamTpoFutureResponse);
+
+  // Stream volume profile data for spot markets
+  rpc StreamVolumeProfileSpot(StreamVolumeProfileSpotRequest) returns (stream StreamVolumeProfileSpotResponse);
+
+  // Stream economic calendar events
+  rpc StreamEconomicCalendar(StreamEconomicCalendarRequest) returns (stream StreamEconomicCalendarResponse);
 }
 
-message StreamDataRequest {
-    // Required: Specify the source of the data.
-    chapaty.data.v1.DataBroker data_broker = 1;
-    
-    // Required: Specify the kind of schema to retrieve.
-    // This determines which other fields are required.
-    chapaty.data.v1.SchemaKind schema_kind = 2;
-    
-    // Required: Symbol/contract identifier (e.g., "btc-usdt", "6ez5")
-    // The schema_kind already indicates if this is spot or futures data.
-    string symbol = 3;
-    
-    // Required: The year for which data is requested (e.g., 2025).
-    int32 year = 4;
-    
-    // Optional: Exchange name (e.g., "binance", "cme")
-    // If empty, defaults to the name of the given data_broker.
-    string exchange = 5;
-    
-    // Optional: Base timeframe period for OHLCV/TPO data (e.g., "1m", "5m", "1h", "1d")
-    // Required for: OHLCV_SPOT, OHLCV_FUTURE, TPO_SPOT, TPO_FUTURE
-    // Default: "1m"
-    // Not used for: TICK_SPOT, VOLUME_PROFILE_SPOT
-    string period = 6;
-    
-    // Optional: Aggregation timeframe for volume profile and TPO queries.
-    // Format: N{m|h|d|w} (e.g., "5m", "1h", "1d", "1w")
-    // Aggregates base 1-minute data to the specified resolution.
-    // Defaults to "1m" (no aggregation) if not specified.
-    // Only used for: VOLUME_PROFILE_SPOT, TPO_SPOT, TPO_FUTURE
-    string agg_time_frame = 7;
-    
-    // Optional: Price bin size for volume profile and TPO aggregation (in quote currency).
-    // Examples: 1.0 (1 USD bins), 5.0 (5 USD bins), 0.01 (1 cent bins), 0.00005 (6e tick size)
-    // Rebuckets base granular price bins to the specified size.
-    // Defaults to the finest available price granularity if not specified.
-    // Only used for: VOLUME_PROFILE_SPOT, TPO_SPOT, TPO_FUTURE
-    double agg_price_bin = 8;
-    
-    // Optional: Data source identifier for economic calendar events (e.g., "investing.com", "fred")
-    // Filters economic calendar data by the provider/source of the event.
-    // If empty, returns events from all available data sources.
-    // Only used for: ECONOMIC_CALENDAR
-    string data_source = 9;
+// ============================================================================
+// Common Types
+// ============================================================================
 
-    // Optional: ISO 4217 currency code (e.g., "USD", "EUR", "GBP").
-    // Filters economic calendar data by the currency code of the event.
-    // If empty, returns events from all available currency codes.
-    // Only used for: ECONOMIC_CALENDAR
-    string currency_code = 10;
-    
-    // Optional: Maximum events per batch in streaming responses.
-    // Allows clients to tune latency vs throughput.
-    // Defaults to 1000 if not specified or set to 0.
-    // Recommended range: 100-10000 depending on event size and network conditions.
-    int32 batch_size = 100;
+// Base parameters common to all market data queries
+message BaseMarketParams {
+  // Required: Data source
+  chapaty.data.v1.DataBroker data_broker = 1;
+
+  // Required: Symbol identifier (e.g., "btc-usdt", "6ez5")
+  string                     symbol      = 2;
+
+  // Required: Year for data retrieval
+  int32                      year        = 3;
+
+  // Optional: Exchange name. Defaults to data_broker name if empty.
+  string                     exchange    = 4;
+
+  // Optional: Batch size for streaming. Defaults to 1000. Range: 100-10000.
+  int32                      batch_size  = 5;
 }
 
-message StreamDataResponse {
-    DataBatch batch = 1;
+// Aggregation parameters for profile-based data
+message ProfileAggregation {
+  // Aggregation timeframe (e.g., "5m", "1h", "1d", "1w")
+  // Defaults to "1m" if not specified.
+  string time_frame = 1;
+
+  // Price bin size in quote currency (e.g., 1.0, 0.01)
+  // Defaults to finest available granularity if not specified.
+  double price_bin  = 2;
 }
 
-message DataBatch {
-    // Each batch contains only events - no repeated metadata.
-    // The client combines this with the metadata from the first message.
-    oneof data {
-        // Tick-level data for spot markets
-        chapaty.data.v1.TickSpotBatch tick_spot = 1;
+// Standard batch metadata
+message BatchMetadata {
+  // Sequence number for this batch (starts at 0)
+  int64 sequence = 1;
 
-        // OHLCV (Open-High-Low-Close-Volume) data for spot markets
-        chapaty.data.v1.OhlcvSpotBatch ohlcv_spot = 2;
+  // True if this is the final batch
+  bool  is_final = 2;
+}
 
-        // OHLCV data for futures markets
-        chapaty.data.v1.OhlcvFutureBatch ohlcv_future = 3;
+// ============================================================================
+// Tick Spot
+// ============================================================================
 
-        // TPO (Time Price Opportunity) data for spot markets
-        chapaty.data.v1.TpoSpotBatch tpo_spot = 4;
+message StreamTickSpotRequest {
+  BaseMarketParams params = 1;
+}
 
-        // TPO data for futures markets
-        chapaty.data.v1.TpoFutureBatch tpo_future = 5;
+message StreamTickSpotResponse {
+  chapaty.data.v1.TickSpotBatch batch    = 1;
+  BatchMetadata                 metadata = 2;
+}
 
-        // Volume Profile data for spot markets
-        chapaty.data.v1.VolumeProfileSpotBatch volume_profile_spot = 6;
+// ============================================================================
+// OHLCV Spot
+// ============================================================================
 
-        // Economic calendar data (e.g., macroeconomic releases)
-        chapaty.data.v1.EconomicCalendarBatch economic_calendar = 7;
-    }
-    
-    // Sequence number for this batch (starts at 0)
-    int64 sequence = 100;
-    
-    // True if this is the final batch in the stream
-    bool is_final = 110;
+message StreamOhlcvSpotRequest {
+  BaseMarketParams params = 1;
+
+  // Timeframe period (e.g., "1m", "5m", "1h", "1d")
+  // Defaults to "1m" if not specified.
+  string           period = 2;
+}
+
+message StreamOhlcvSpotResponse {
+  chapaty.data.v1.OhlcvSpotBatch batch    = 1;
+  BatchMetadata                  metadata = 2;
+}
+
+// ============================================================================
+// OHLCV Future
+// ============================================================================
+
+message StreamOhlcvFutureRequest {
+  BaseMarketParams params = 1;
+
+  // Timeframe period (e.g., "1m", "5m", "1h", "1d")
+  // Defaults to "1m" if not specified.
+  string           period = 2;
+}
+
+message StreamOhlcvFutureResponse {
+  chapaty.data.v1.OhlcvFutureBatch batch    = 1;
+  BatchMetadata                    metadata = 2;
+}
+
+// ============================================================================
+// TPO Spot
+// ============================================================================
+
+message StreamTpoSpotRequest {
+  BaseMarketParams   params      = 1;
+
+  // Optional: Aggregation parameters
+  ProfileAggregation aggregation = 3;
+}
+
+message StreamTpoSpotResponse {
+  chapaty.data.v1.TpoSpotBatch batch    = 1;
+  BatchMetadata                metadata = 2;
+}
+
+// ============================================================================
+// TPO Future
+// ============================================================================
+
+message StreamTpoFutureRequest {
+  BaseMarketParams   params      = 1;
+
+  // Optional: Aggregation parameters
+  ProfileAggregation aggregation = 3;
+}
+
+message StreamTpoFutureResponse {
+  chapaty.data.v1.TpoFutureBatch batch    = 1;
+  BatchMetadata                  metadata = 2;
+}
+
+// ============================================================================
+// Volume Profile Spot
+// ============================================================================
+
+message StreamVolumeProfileSpotRequest {
+  BaseMarketParams   params      = 1;
+
+  // Optional: Aggregation parameters
+  ProfileAggregation aggregation = 2;
+}
+
+message StreamVolumeProfileSpotResponse {
+  chapaty.data.v1.VolumeProfileSpotBatch batch    = 1;
+  BatchMetadata                          metadata = 2;
+}
+
+// ============================================================================
+// Economic Calendar
+// ============================================================================
+
+message StreamEconomicCalendarRequest {
+  // Required: Data source
+  chapaty.data.v1.DataBroker data_broker   = 1;
+
+  // Required: Year for data retrieval
+  int32                      year          = 2;
+
+  // Optional: Filter by data source (e.g., "investing.com", "fred")
+  string                     data_source   = 3;
+
+  // Optional: Filter by ISO 4217 currency code (e.g., "USD", "EUR")
+  string                     currency_code = 4;
+
+  // Optional: Batch size. Defaults to 1000.
+  int32                      batch_size    = 5;
+}
+
+message StreamEconomicCalendarResponse {
+  chapaty.data.v1.EconomicCalendarBatch batch    = 1;
+  BatchMetadata                         metadata = 2;
 }
