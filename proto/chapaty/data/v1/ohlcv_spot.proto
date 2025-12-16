@@ -6,19 +6,19 @@ option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty
 import "google/protobuf/timestamp.proto";
 
 message OhlcvSpotBatch {
-    repeated OhlcvSpotEvent events = 1;
+  repeated OhlcvSpotEvent events = 1;
 }
 
 message OhlcvSpotEvent {
-    google.protobuf.Timestamp open_timestamp = 1;
-    double open = 2;
-    double high = 3;
-    double low = 4;
-    double close = 5;
-    double volume = 6;
-    google.protobuf.Timestamp close_timestamp = 7;
-    double quote_asset_volume = 8;
-    int64 number_of_trades = 9;
-    double taker_buy_base_asset_volume = 10;
-    double taker_buy_quote_asset_volume = 11;
+  google.protobuf.Timestamp open_timestamp               = 1;
+  double                    open                         = 2;
+  double                    high                         = 3;
+  double                    low                          = 4;
+  double                    close                        = 5;
+  double                    volume                       = 6;
+  google.protobuf.Timestamp close_timestamp              = 7;
+  double                    quote_asset_volume           = 8;
+  int64                     number_of_trades             = 9;
+  double                    taker_buy_base_asset_volume  = 10;
+  double                    taker_buy_quote_asset_volume = 11;
 }

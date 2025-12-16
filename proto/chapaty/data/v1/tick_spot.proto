@@ -7,15 +7,15 @@ option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty
 import "google/protobuf/timestamp.proto";
 
 message TickSpotBatch {
-    repeated TickSpotEvent events = 4;
+  repeated TickSpotEvent events = 4;
 }
 
 message TickSpotEvent {
-    int64 trade_id = 1;
-    double price = 2;
-    double quantity = 3;
-    double quote_quantity = 4;
-    google.protobuf.Timestamp trade_timestamp = 5;
-    bool is_buyer_maker = 6;
-    bool is_best_match = 7;
+  int64                     trade_id        = 1;
+  double                    price           = 2;
+  double                    quantity        = 3;
+  double                    quote_quantity  = 4;
+  google.protobuf.Timestamp trade_timestamp = 5;
+  bool                      is_buyer_maker  = 6;
+  bool                      is_best_match   = 7;
 }

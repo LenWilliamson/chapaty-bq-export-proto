@@ -6,15 +6,15 @@ option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty
 import "google/protobuf/timestamp.proto";
 
 message OhlcvFutureBatch {
-    repeated OhlcvFutureEvent events = 1;
+  repeated OhlcvFutureEvent events = 1;
 }
 
 message OhlcvFutureEvent {
-    google.protobuf.Timestamp open_timestamp = 1;
-    double open = 2;
-    double high = 3;
-    double low = 4;
-    double close = 5;
-    double volume = 6;
-    google.protobuf.Timestamp close_timestamp = 7;
+  google.protobuf.Timestamp open_timestamp  = 1;
+  double                    open            = 2;
+  double                    high            = 3;
+  double                    low             = 4;
+  double                    close           = 5;
+  double                    volume          = 6;
+  google.protobuf.Timestamp close_timestamp = 7;
 }

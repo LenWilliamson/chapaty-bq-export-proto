@@ -6,13 +6,13 @@ option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty
 import "google/protobuf/timestamp.proto";
 
 message TpoSpotBatch {
-    repeated TpoSpotEvent events = 1;
+  repeated TpoSpotEvent events = 1;
 }
 
 message TpoSpotEvent {
-    google.protobuf.Timestamp window_start = 1;
-    google.protobuf.Timestamp window_end = 2;
-    double price_bin_start = 3;
-    double price_bin_end = 4;
-    int64 time_slot_count = 5;
+  google.protobuf.Timestamp window_start    = 1;
+  google.protobuf.Timestamp window_end      = 2;
+  double                    price_bin_start = 3;
+  double                    price_bin_end   = 4;
+  int64                     time_slot_count = 5;
 }
