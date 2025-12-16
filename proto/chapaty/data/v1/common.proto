@@ -2,20 +2,34 @@ syntax = "proto3";
 package chapaty.data.v1;
 option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty/data/v1;datav1";
 
+// DataBroker identifies the upstream system/provider that produced the data.
 enum DataBroker {
-    DATA_SOURCE_UNSPECIFIED = 0;
-    BINANCE = 1;
-    NINJA_TRADER = 2;
-    INVESTING_COM = 3;
+    // Default/unknown broker.
+    DATA_BROKER_UNSPECIFIED = 0;
+    // Binance exchange.
+    DATA_BROKER_BINANCE = 1;
+    // NinjaTrader platform.
+    DATA_BROKER_NINJA_TRADER = 2;
+    // Investing.com data source.
+    DATA_BROKER_INVESTING_COM = 3;
 }
 
+// SchemaKind identifies the logical schema/shape of records being stored/exported.
 enum SchemaKind {
+    // Default/unknown schema kind.
     SCHEMA_KIND_UNSPECIFIED = 0;
-    TICK_SPOT = 1;
-    OHLCV_FUTURE = 2;
-    OHLCV_SPOT = 3;
-    TPO_SPOT = 4;
-    TPO_FUTURE = 5;
-    VOLUME_PROFILE_SPOT = 6;
-    ECONOMIC_CALENDAR = 7;
+    // Spot tick data.
+    SCHEMA_KIND_TICK_SPOT = 1;
+    // Futures OHLCV candle data.
+    SCHEMA_KIND_OHLCV_FUTURE = 2;
+    // Spot OHLCV candle data.
+    SCHEMA_KIND_OHLCV_SPOT = 3;
+    // Spot TPO (market profile) data.
+    SCHEMA_KIND_TPO_SPOT = 4;
+    // Futures TPO (market profile) data.
+    SCHEMA_KIND_TPO_FUTURE = 5;
+    // Spot volume profile data.
+    SCHEMA_KIND_VOLUME_PROFILE_SPOT = 6;
+    // Economic calendar events.
+    SCHEMA_KIND_ECONOMIC_CALENDAR = 7;
 }

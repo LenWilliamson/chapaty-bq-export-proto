@@ -3,14 +3,14 @@ package chapaty.bq_exporter.v1;
 
 option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty/bq_exporter/v1;bqexporterv1";
 
-import "proto/chapaty/data/v1/common.proto";
-import "proto/chapaty/data/v1/tick_spot.proto";
-import "proto/chapaty/data/v1/ohlcv_spot.proto";
-import "proto/chapaty/data/v1/ohlcv_future.proto";
-import "proto/chapaty/data/v1/tpo_spot.proto";
-import "proto/chapaty/data/v1/tpo_future.proto";
-import "proto/chapaty/data/v1/volume_profile_spot.proto";
-import "proto/chapaty/data/v1/economic_calendar.proto";
+import "chapaty/data/v1/common.proto";
+import "chapaty/data/v1/tick_spot.proto";
+import "chapaty/data/v1/ohlcv_spot.proto";
+import "chapaty/data/v1/ohlcv_future.proto";
+import "chapaty/data/v1/tpo_spot.proto";
+import "chapaty/data/v1/tpo_future.proto";
+import "chapaty/data/v1/volume_profile_spot.proto";
+import "chapaty/data/v1/economic_calendar.proto";
 
 // Market data export service.
 service ExporterService {
@@ -64,7 +64,7 @@ message ProfileAggregation {
   // Defaults to "1m" if not specified.
   string time_frame = 1;
 
-  // Price bin size in quote currency (e.g., 1.0, 0.01)
+  // Price bin size in quote currency (e.g., 1.0, 0.01, 0.00005)
   // Defaults to finest available granularity if not specified.
   double price_bin  = 2;
 }

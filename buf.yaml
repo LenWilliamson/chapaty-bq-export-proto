@@ -1,2 +1,4 @@
-version: v1
-name: buf.build/lenwilliamson/chapaty-bq-export-proto
+version: v2
+modules:
+  - path: proto
+    name: buf.build/lenwilliamson/chapaty-bq-export-proto
