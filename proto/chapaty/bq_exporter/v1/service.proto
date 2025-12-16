@@ -13,29 +13,27 @@ import "proto/chapaty/data/v1/volume_profile_spot.proto";
 import "proto/chapaty/data/v1/economic_calendar.proto";
 
 // Market data export service.
-// Each RPC is specialized for a specific data type, providing clear contracts
-// and enabling independent evolution of each endpoint.
 service ExporterService {
   // Stream tick-level spot market data
-  rpc StreamTickSpot(StreamTickSpotRequest) returns (stream StreamTickSpotResponse);
+  rpc TickSpot(TickSpotRequest) returns (stream TickSpotResponse);
 
   // Stream OHLCV data for spot markets
-  rpc StreamOhlcvSpot(StreamOhlcvSpotRequest) returns (stream StreamOhlcvSpotResponse);
+  rpc OhlcvSpot(OhlcvSpotRequest) returns (stream OhlcvSpotResponse);
 
   // Stream OHLCV data for futures markets
-  rpc StreamOhlcvFuture(StreamOhlcvFutureRequest) returns (stream StreamOhlcvFutureResponse);
+  rpc OhlcvFuture(OhlcvFutureRequest) returns (stream OhlcvFutureResponse);
 
   // Stream TPO data for spot markets
-  rpc StreamTpoSpot(StreamTpoSpotRequest) returns (stream StreamTpoSpotResponse);
+  rpc TpoSpot(TpoSpotRequest) returns (stream TpoSpotResponse);
 
   // Stream TPO data for futures markets
-  rpc StreamTpoFuture(StreamTpoFutureRequest) returns (stream StreamTpoFutureResponse);
+  rpc TpoFuture(TpoFutureRequest) returns (stream TpoFutureResponse);
 
   // Stream volume profile data for spot markets
-  rpc StreamVolumeProfileSpot(StreamVolumeProfileSpotRequest) returns (stream StreamVolumeProfileSpotResponse);
+  rpc VolumeProfileSpot(VolumeProfileSpotRequest) returns (stream VolumeProfileSpotResponse);
 
   // Stream economic calendar events
-  rpc StreamEconomicCalendar(StreamEconomicCalendarRequest) returns (stream StreamEconomicCalendarResponse);
+  rpc EconomicCalendar(EconomicCalendarRequest) returns (stream EconomicCalendarResponse);
 }
 
 // ============================================================================
@@ -84,11 +82,11 @@ message BatchMetadata {
 // Tick Spot
 // ============================================================================
 
-message StreamTickSpotRequest {
+message TickSpotRequest {
   BaseMarketParams params = 1;
 }
 
-message StreamTickSpotResponse {
+message TickSpotResponse {
   chapaty.data.v1.TickSpotBatch batch    = 1;
   BatchMetadata                 metadata = 2;
 }
@@ -97,7 +95,7 @@ message StreamTickSpotResponse {
 // OHLCV Spot
 // ============================================================================
 
-message StreamOhlcvSpotRequest {
+message OhlcvSpotRequest {
   BaseMarketParams params = 1;
 
   // Timeframe period (e.g., "1m", "5m", "1h", "1d")
@@ -105,7 +103,7 @@ message StreamOhlcvSpotRequest {
   string           period = 2;
 }
 
-message StreamOhlcvSpotResponse {
+message OhlcvSpotResponse {
   chapaty.data.v1.OhlcvSpotBatch batch    = 1;
   BatchMetadata                  metadata = 2;
 }
@@ -114,7 +112,7 @@ message StreamOhlcvSpotResponse {
 // OHLCV Future
 // ============================================================================
 
-message StreamOhlcvFutureRequest {
+message OhlcvFutureRequest {
   BaseMarketParams params = 1;
 
   // Timeframe period (e.g., "1m", "5m", "1h", "1d")
@@ -122,7 +120,7 @@ message StreamOhlcvFutureRequest {
   string           period = 2;
 }
 
-message StreamOhlcvFutureResponse {
+message OhlcvFutureResponse {
   chapaty.data.v1.OhlcvFutureBatch batch    = 1;
   BatchMetadata                    metadata = 2;
 }
@@ -131,14 +129,14 @@ message StreamOhlcvFutureResponse {
 // TPO Spot
 // ============================================================================
 
-message StreamTpoSpotRequest {
+message TpoSpotRequest {
   BaseMarketParams   params      = 1;
 
   // Optional: Aggregation parameters
-  ProfileAggregation aggregation = 3;
+  ProfileAggregation aggregation = 2;
 }
 
-message StreamTpoSpotResponse {
+message TpoSpotResponse {
   chapaty.data.v1.TpoSpotBatch batch    = 1;
   BatchMetadata                metadata = 2;
 }
@@ -147,14 +145,14 @@ message StreamTpoSpotResponse {
 // TPO Future
 // ============================================================================
 
-message StreamTpoFutureRequest {
+message TpoFutureRequest {
   BaseMarketParams   params      = 1;
 
   // Optional: Aggregation parameters
-  ProfileAggregation aggregation = 3;
+  ProfileAggregation aggregation = 2;
 }
 
-message StreamTpoFutureResponse {
+message TpoFutureResponse {
   chapaty.data.v1.TpoFutureBatch batch    = 1;
   BatchMetadata                  metadata = 2;
 }
@@ -163,14 +161,14 @@ message StreamTpoFutureResponse {
 // Volume Profile Spot
 // ============================================================================
 
-message StreamVolumeProfileSpotRequest {
+message VolumeProfileSpotRequest {
   BaseMarketParams   params      = 1;
 
   // Optional: Aggregation parameters
   ProfileAggregation aggregation = 2;
 }
 
-message StreamVolumeProfileSpotResponse {
+message VolumeProfileSpotResponse {
   chapaty.data.v1.VolumeProfileSpotBatch batch    = 1;
   BatchMetadata                          metadata = 2;
 }
@@ -179,7 +177,7 @@ message StreamVolumeProfileSpotResponse {
 // Economic Calendar
 // ============================================================================
 
-message StreamEconomicCalendarRequest {
+message EconomicCalendarRequest {
   // Required: Data source
   chapaty.data.v1.DataBroker data_broker   = 1;
 
@@ -196,7 +194,7 @@ message StreamEconomicCalendarRequest {
   int32                      batch_size    = 5;
 }
 
-message StreamEconomicCalendarResponse {
+message EconomicCalendarResponse {
   chapaty.data.v1.EconomicCalendarBatch batch    = 1;
   BatchMetadata                         metadata = 2;
 }
