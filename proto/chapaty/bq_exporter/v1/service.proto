@@ -186,7 +186,7 @@ message StreamEconomicCalendarRequest {
   // Required: Year for data retrieval
   int32                      year          = 2;
 
-  // Optional: Filter by data source (e.g., "investing.com", "fred")
+  // Optional: Filter by data source (e.g., "investingcom", "fred")
   string                     data_source   = 3;
 
   // Optional: Filter by ISO 4217 currency code (e.g., "USD", "EUR")
