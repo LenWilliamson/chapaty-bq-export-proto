@@ -3,14 +3,14 @@ package chapaty.bq_exporter.v1;
 
 option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty/bq_exporter/v1;bqexporterv1";
 
-import "../../data/v1/common.proto";
-import "../../data/v1/tick_spot.proto";
-import "../../data/v1/ohlcv_spot.proto";
-import "../../data/v1/ohlcv_future.proto";
-import "../../data/v1/tpo_spot.proto";
-import "../../data/v1/tpo_future.proto";
-import "../../data/v1/volume_profile_spot.proto";
-import "../../data/v1/economic_calendar.proto";
+import "proto/chapaty/data/v1/common.proto";
+import "proto/chapaty/data/v1/tick_spot.proto";
+import "proto/chapaty/data/v1/ohlcv_spot.proto";
+import "proto/chapaty/data/v1/ohlcv_future.proto";
+import "proto/chapaty/data/v1/tpo_spot.proto";
+import "proto/chapaty/data/v1/tpo_future.proto";
+import "proto/chapaty/data/v1/volume_profile_spot.proto";
+import "proto/chapaty/data/v1/economic_calendar.proto";
 
 // Market data export service.
 // Each RPC is specialized for a specific data type, providing clear contracts
