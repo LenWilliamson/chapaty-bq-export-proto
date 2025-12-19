@@ -187,7 +187,7 @@ message EconomicCalendarRequest {
   // Optional: Filter by data source (e.g., "investingcom", "fred")
   string                     data_source   = 3;
 
-  // Optional: Filter by ISO 4217 currency code (e.g., "USD", "EUR")
+  // Optional: Filter by ISO 4217 lowercase currency code (e.g., "usd", "eur")
   string                     currency_code = 4;
 
   // Optional: Batch size. Defaults to 1000.
