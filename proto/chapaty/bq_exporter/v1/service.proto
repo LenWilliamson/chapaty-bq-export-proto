@@ -46,16 +46,16 @@ message BaseMarketParams {
   chapaty.data.v1.DataBroker data_broker = 1;
 
   // Required: Symbol identifier (e.g., "btc-usdt", "6ez5")
-  string                     symbol      = 2;
+  string symbol = 2;
 
   // Required: Year for data retrieval
-  int32                      year        = 3;
+  int32 year = 3;
 
   // Optional: Exchange name. Defaults to data_broker name if empty.
-  string                     exchange    = 4;
+  string exchange = 4;
 
   // Optional: Batch size for streaming. Defaults to 1000. Range: 100-10000.
-  int32                      batch_size  = 5;
+  int32 batch_size = 5;
 }
 
 // Aggregation parameters for profile-based data
@@ -66,7 +66,7 @@ message ProfileAggregation {
 
   // Price bin size in quote currency (e.g., 1.0, 0.01, 0.00005)
   // Defaults to finest available granularity if not specified.
-  double price_bin  = 2;
+  double price_bin = 2;
 }
 
 // Standard batch metadata
@@ -75,7 +75,7 @@ message BatchMetadata {
   int64 sequence = 1;
 
   // True if this is the final batch
-  bool  is_final = 2;
+  bool is_final = 2;
 }
 
 // ============================================================================
@@ -100,7 +100,7 @@ message OhlcvSpotRequest {
 
   // Timeframe period (e.g., "1m", "5m", "1h", "1d")
   // Defaults to "1m" if not specified.
-  string           period = 2;
+  string period = 2;
 }
 
 message OhlcvSpotResponse {
@@ -117,7 +117,7 @@ message OhlcvFutureRequest {
 
   // Timeframe period (e.g., "1m", "5m", "1h", "1d")
   // Defaults to "1m" if not specified.
-  string           period = 2;
+  string period = 2;
 }
 
 message OhlcvFutureResponse {
@@ -130,7 +130,7 @@ message OhlcvFutureResponse {
 // ============================================================================
 
 message TpoSpotRequest {
-  BaseMarketParams   params      = 1;
+  BaseMarketParams params = 1;
 
   // Optional: Aggregation parameters
   ProfileAggregation aggregation = 2;
@@ -146,7 +146,7 @@ message TpoSpotResponse {
 // ============================================================================
 
 message TpoFutureRequest {
-  BaseMarketParams   params      = 1;
+  BaseMarketParams params = 1;
 
   // Optional: Aggregation parameters
   ProfileAggregation aggregation = 2;
@@ -162,7 +162,7 @@ message TpoFutureResponse {
 // ============================================================================
 
 message VolumeProfileSpotRequest {
-  BaseMarketParams   params      = 1;
+  BaseMarketParams params = 1;
 
   // Optional: Aggregation parameters
   ProfileAggregation aggregation = 2;
@@ -179,19 +179,19 @@ message VolumeProfileSpotResponse {
 
 message EconomicCalendarRequest {
   // Required: Data source
-  chapaty.data.v1.DataBroker data_broker   = 1;
+  chapaty.data.v1.DataBroker data_broker = 1;
 
   // Required: Year for data retrieval
-  int32                      year          = 2;
+  int32 year = 2;
 
   // Optional: Filter by data source (e.g., "investingcom", "fred")
-  string                     data_source   = 3;
+  string data_source = 3;
 
-  // Optional: Filter by ISO 4217 lowercase currency code (e.g., "usd", "eur")
-  string                     currency_code = 4;
+  // Optional: Filter by country using an ISO 3166-1 alpha-2 uppercase code (e.g., "AU", "US"). The non-standard code "EZ" is supported to indicate the Euro Zone.
+  string country_code = 4;
 
   // Optional: Batch size. Defaults to 1000.
-  int32                      batch_size    = 5;
+  int32 batch_size = 5;
 }
 
 message EconomicCalendarResponse {
