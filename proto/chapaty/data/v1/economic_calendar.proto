@@ -15,10 +15,13 @@ message EconomicCalendarBatch {
 message EconomicCalendarEvent {
   // UTC timestamp of the event.
   // Converted from local time zone, adjusted for daylight saving time if applicable.
-  google.protobuf.Timestamp event_timestamp      = 1;
+  google.protobuf.Timestamp event_timestamp = 1;
+
+  // Data source (e.g., "investingcom", "fred")
+  string data_source = 2;
 
   // Event category from the data source (e.g., investing.com classification).
-  string                    category             = 2;
+  string category = 3;
 
   // Classified event type identifier (e.g., "NFP", "CPI", "FOMC").
   // Empty string if classification was not performed or failed.
@@ -26,13 +29,13 @@ message EconomicCalendarEvent {
   //   - Deterministic text rules (news_type_source = "rule")
   //   - ML/NLP models (news_type_source = "ml" or "nlp")
   //   - Manual curation (news_type_source = "manual")
-  string                    news_type            = 3;
+  string news_type = 4;
 
   // Confidence score for news_type classification (0.0 to 1.0).
   // Null if news_type is empty or unclassified.
   // Deterministic rules typically use 1.0.
   // ML/NLP models provide calibrated probability scores.
-  optional double           news_type_confidence = 4;
+  optional double news_type_confidence = 5;
 
   // Method used to derive news_type classification.
   // Common values:
@@ -41,7 +44,7 @@ message EconomicCalendarEvent {
   //   "ml"     - Machine learning classifier (e.g., BigQuery ML)
   //   "nlp"    - Natural language processing pipeline or LLM
   // Empty string if news_type was not classified.
-  string                    news_type_source     = 5;
+  string news_type_source = 6;
 
   // Reporting periodicity of the indicator.
   // Describes the time period over which the metric is measured or compared.
@@ -50,32 +53,32 @@ message EconomicCalendarEvent {
   //   "qoq" - Quarter-over-Quarter (e.g., quarterly GDP growth)
   //   "yoy" - Year-over-Year (e.g., annual inflation rate)
   // Empty string for non-recurring or irregular events.
-  string                    periodicity          = 6;
+  string periodicity = 7;
 
   // Full descriptive name of the event (e.g., "Non-Farm Payrolls Report").
-  string                    news_name            = 7;
+  string news_name = 8;
 
   // ISO 3166-1 alpha-2 country code (e.g., "US", "GB", "JP").
   // "EZ" is commonly used for Euro Zone.
-  string                    country_code         = 8;
+  string country_code = 9;
 
   // ISO 4217 currency code (e.g., "USD", "EUR", "GBP").
-  string                    currency_code        = 9;
+  string currency_code = 10;
 
   // Importance level of the event.
   // Typical scale: 1 = Low, 2 = Medium, 3 = High
   // Zero if importance is not assigned or unknown.
-  int32                     importance           = 10;
+  int32 importance = 11;
 
   // Actual reported value of the economic indicator.
   // Null if not yet released or not applicable.
-  optional double           actual               = 11;
+  optional double actual = 12;
 
   // Forecasted/expected value before release.
   // Null if no forecast was published.
-  optional double           forecast             = 12;
+  optional double forecast = 13;
 
   // Previously reported value (from prior release period).
   // Null if not applicable or unavailable.
-  optional double           previous             = 13;
+  optional double previous = 14;
 }
