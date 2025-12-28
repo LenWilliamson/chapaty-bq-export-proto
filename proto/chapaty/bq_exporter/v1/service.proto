@@ -177,6 +177,28 @@ message VolumeProfileSpotResponse {
 // Economic Calendar
 // ============================================================================
 
+// EconomicCategory identifies the economic classification of calendar events.
+enum EconomicCategory {
+  // Default/unknown category.
+  ECONOMIC_CATEGORY_UNSPECIFIED = 0;
+  // Employment-related indicators.
+  ECONOMIC_CATEGORY_EMPLOYMENT = 1;
+  // Economic activity indicators.
+  ECONOMIC_CATEGORY_ECONOMIC_ACTIVITY = 2;
+  // Inflation-related indicators.
+  ECONOMIC_CATEGORY_INFLATION = 3;
+  // Credit and lending indicators.
+  ECONOMIC_CATEGORY_CREDIT = 4;
+  // Central bank policy and actions.
+  ECONOMIC_CATEGORY_CENTRAL_BANKS = 5;
+  // Consumer and business confidence indicators.
+  ECONOMIC_CATEGORY_CONFIDENCE_INDEX = 6;
+  // Balance of payments or trade balance indicators.
+  ECONOMIC_CATEGORY_BALANCE = 7;
+  // Bond market–related indicators.
+  ECONOMIC_CATEGORY_BONDS = 8;
+}
+
 message EconomicCalendarRequest {
   // Required: Data source
   chapaty.data.v1.DataBroker data_broker = 1;
@@ -189,9 +211,12 @@ message EconomicCalendarRequest {
 
   // Optional: Filter by country using an ISO 3166-1 alpha-2 uppercase code (e.g., "AU", "US"). The non-standard code "EZ" is supported to indicate the Euro Zone.
   string country_code = 4;
+  
+  // Optional: Filter by economic category.
+  EconomicCategory economic_category = 5;
 
   // Optional: Batch size. Defaults to 1000.
-  int32 batch_size = 5;
+  int32 batch_size = 6;
 }
 
 message EconomicCalendarResponse {
