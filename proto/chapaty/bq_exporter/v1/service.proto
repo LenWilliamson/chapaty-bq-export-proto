@@ -4,18 +4,18 @@ package chapaty.bq_exporter.v1;
 option go_package = "github.com/LenWilliamson/chapaty-bq-exporter/gen/go/chapaty/bq_exporter/v1;bqexporterv1";
 
 import "chapaty/data/v1/common.proto";
-import "chapaty/data/v1/tick_spot.proto";
-import "chapaty/data/v1/ohlcv_spot.proto";
-import "chapaty/data/v1/ohlcv_future.proto";
-import "chapaty/data/v1/tpo_spot.proto";
-import "chapaty/data/v1/tpo_future.proto";
-import "chapaty/data/v1/volume_profile_spot.proto";
 import "chapaty/data/v1/economic_calendar.proto";
+import "chapaty/data/v1/ohlcv_future.proto";
+import "chapaty/data/v1/ohlcv_spot.proto";
+import "chapaty/data/v1/tpo_future.proto";
+import "chapaty/data/v1/tpo_spot.proto";
+import "chapaty/data/v1/trade_spot.proto";
+import "chapaty/data/v1/volume_profile_spot.proto";
 
 // Market data export service.
 service ExporterService {
-  // Stream tick-level spot market data
-  rpc TickSpot(TickSpotRequest) returns (stream TickSpotResponse);
+  // Stream trade-level spot market data
+  rpc TradeSpot(TradeSpotRequest) returns (stream TradeSpotResponse);
 
   // Stream OHLCV data for spot markets
   rpc OhlcvSpot(OhlcvSpotRequest) returns (stream OhlcvSpotResponse);
@@ -79,16 +79,16 @@ message BatchMetadata {
 }
 
 // ============================================================================
-// Tick Spot
+// Trade Spot
 // ============================================================================
 
-message TickSpotRequest {
+message TradeSpotRequest {
   BaseMarketParams params = 1;
 }
 
-message TickSpotResponse {
-  chapaty.data.v1.TickSpotBatch batch    = 1;
-  BatchMetadata                 metadata = 2;
+message TradeSpotResponse {
+  chapaty.data.v1.TradeSpotBatch batch    = 1;
+  BatchMetadata                  metadata = 2;
 }
 
 // ============================================================================
@@ -211,7 +211,7 @@ message EconomicCalendarRequest {
 
   // Optional: Filter by country using an ISO 3166-1 alpha-2 uppercase code (e.g., "AU", "US"). The non-standard code "EZ" is supported to indicate the Euro Zone.
   string country_code = 4;
-  
+
   // Optional: Filter by economic category.
   EconomicCategory economic_category = 5;
 
