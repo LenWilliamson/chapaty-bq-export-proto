@@ -64,9 +64,9 @@ message ProfileAggregation {
   // Defaults to "1m" if not specified.
   string time_frame = 1;
 
-  // Price bin size in quote currency (e.g., 1.0, 0.01, 0.00005)
+  // Price bin size in quote currency (e.g., "1.0", "0.01", "0.00005")
   // Defaults to finest available granularity if not specified.
-  double price_bin = 2;
+  string price_bin = 2;
 }
 
 // Standard batch metadata
@@ -79,7 +79,7 @@ message BatchMetadata {
 }
 
 // ============================================================================
-// Trade Spot
+// Trades Spot
 // ============================================================================
 
 message TradesSpotRequest {
