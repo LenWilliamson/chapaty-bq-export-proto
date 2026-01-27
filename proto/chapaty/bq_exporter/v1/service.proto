@@ -9,13 +9,13 @@ import "chapaty/data/v1/ohlcv_future.proto";
 import "chapaty/data/v1/ohlcv_spot.proto";
 import "chapaty/data/v1/tpo_future.proto";
 import "chapaty/data/v1/tpo_spot.proto";
-import "chapaty/data/v1/trade_spot.proto";
+import "chapaty/data/v1/trades_spot.proto";
 import "chapaty/data/v1/volume_profile_spot.proto";
 
 // Market data export service.
 service ExporterService {
   // Stream trade-level spot market data
-  rpc TradeSpot(TradeSpotRequest) returns (stream TradeSpotResponse);
+  rpc TradesSpot(TradesSpotRequest) returns (stream TradesSpotResponse);
 
   // Stream OHLCV data for spot markets
   rpc OhlcvSpot(OhlcvSpotRequest) returns (stream OhlcvSpotResponse);
@@ -82,12 +82,12 @@ message BatchMetadata {
 // Trade Spot
 // ============================================================================
 
-message TradeSpotRequest {
+message TradesSpotRequest {
   BaseMarketParams params = 1;
 }
 
-message TradeSpotResponse {
-  chapaty.data.v1.TradeSpotBatch batch    = 1;
+message TradesSpotResponse {
+  chapaty.data.v1.TradesSpotBatch batch    = 1;
   BatchMetadata                  metadata = 2;
 }
 
