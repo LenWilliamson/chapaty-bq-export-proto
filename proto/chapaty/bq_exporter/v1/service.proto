@@ -177,8 +177,8 @@ message VolumeProfileSpotResponse {
 // Economic Calendar
 // ============================================================================
 
-// EconomicCategory identifies the economic classification of calendar events.
-enum EconomicCategory {
+// Category identifies the economic classification of calendar events.
+enum Category {
   // Default/unknown category.
   ECONOMIC_CATEGORY_UNSPECIFIED = 0;
   // Employment-related indicators.
@@ -199,6 +199,22 @@ enum EconomicCategory {
   ECONOMIC_CATEGORY_BONDS = 8;
 }
 
+// Importance represents the potential market volatility associated with an event.
+// This corresponds directly to the "bull head" rating on Investing.com.
+enum Importance {
+  // Default value (0). Treated as "Any" or "All Importances" in filters.
+  IMPORTANCE_UNSPECIFIED = 0;
+  // Low volatility expected. Typically routine reports with minor market impact.
+  // (1 Bull)
+  IMPORTANCE_LOW = 1;
+  // Moderate volatility expected. Can move markets if significantly off-consensus.
+  // (2 Bulls)
+  IMPORTANCE_MODERATE = 2;
+  // High volatility expected. Major market movers (e.g., NFP, CPI, Rate Decisions).
+  // (3 Bulls)
+  IMPORTANCE_HIGH = 3;
+}
+
 message EconomicCalendarRequest {
   // Required: Data source
   chapaty.data.v1.DataBroker data_broker = 1;
@@ -213,10 +229,13 @@ message EconomicCalendarRequest {
   string country_code = 4;
 
   // Optional: Filter by economic category.
-  EconomicCategory economic_category = 5;
+  Category category = 5;
+
+  // Optional: Filter by importance
+  Importance importance = 6;
 
   // Optional: Batch size. Defaults to 1000.
-  int32 batch_size = 6;
+  int32 batch_size = 7;
 }
 
 message EconomicCalendarResponse {
