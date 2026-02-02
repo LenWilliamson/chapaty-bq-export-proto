@@ -177,8 +177,8 @@ message VolumeProfileSpotResponse {
 // Economic Calendar
 // ============================================================================
 
-// Category identifies the economic classification of calendar events.
-enum Category {
+// EconomicCategory identifies the economic classification of calendar events.
+enum EconomicCategory {
   // Default/unknown category.
   ECONOMIC_CATEGORY_UNSPECIFIED = 0;
   // Employment-related indicators.
@@ -199,9 +199,9 @@ enum Category {
   ECONOMIC_CATEGORY_BONDS = 8;
 }
 
-// Importance represents the potential market volatility associated with an event.
+// EconomicImportance represents the potential market volatility associated with an event.
 // This corresponds directly to the "bull head" rating on Investing.com.
-enum Importance {
+enum EconomicImportance {
   // Default value (0). Treated as "Any" or "All Importances" in filters.
   IMPORTANCE_UNSPECIFIED = 0;
   // Low volatility expected. Typically routine reports with minor market impact.
@@ -229,10 +229,10 @@ message EconomicCalendarRequest {
   string country_code = 4;
 
   // Optional: Filter by economic category.
-  Category category = 5;
+  EconomicCategory category = 5;
 
   // Optional: Filter by importance
-  Importance importance = 6;
+  EconomicImportance importance = 6;
 
   // Optional: Batch size. Defaults to 1000.
   int32 batch_size = 7;
