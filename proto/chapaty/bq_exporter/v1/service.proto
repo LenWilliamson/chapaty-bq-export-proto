@@ -203,16 +203,16 @@ enum EconomicCategory {
 // This corresponds directly to the "bull head" rating on Investing.com.
 enum EconomicImportance {
   // Default value (0). Treated as "Any" or "All Importances" in filters.
-  IMPORTANCE_UNSPECIFIED = 0;
+  ECONOMIC_IMPORTANCE_UNSPECIFIED = 0;
   // Low volatility expected. Typically routine reports with minor market impact.
   // (1 Bull)
-  IMPORTANCE_LOW = 1;
+  ECONOMIC_IMPORTANCE_LOW = 1;
   // Moderate volatility expected. Can move markets if significantly off-consensus.
   // (2 Bulls)
-  IMPORTANCE_MODERATE = 2;
+  ECONOMIC_IMPORTANCE_MODERATE = 2;
   // High volatility expected. Major market movers (e.g., NFP, CPI, Rate Decisions).
   // (3 Bulls)
-  IMPORTANCE_HIGH = 3;
+  ECONOMIC_IMPORTANCE_HIGH = 3;
 }
 
 message EconomicCalendarRequest {
